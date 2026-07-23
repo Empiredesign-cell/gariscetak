@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#312a26" />
+  <title>Garis Cetak - Layout Buku Praktis</title>
+  <meta name="description" content="Imposisi otomatis isi buku ke media 325 × 485 mm untuk staples tengah, lem panas, dan spiral." />
+  
+  <!-- Font Google: Poppins & Inter untuk tampilan modern -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* DARK MODE (Default berdasarkan gambar) */
+      --bg-base: #312a26;
+      --bg-panel: rgba(60, 53, 49, 0.4);
+      --bg-panel-solid: #3c3531;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --text-main: #ffffff;
+      --text-muted: #b5aba5;
+      
+      --accent-blue: #42d1f5;
+      --accent-orange: #ff6600;
+      
+      --metric-bg: var(--accent-blue);
+      --metric-text: #1a1a1a;
+      
+      --preview-bg: var(--accent-blue);
+      
+      --input-bg-1: var(--accent-blue);
+      --input-bg-2: #ffb347;
+      --input-bg-3: var(--accent-orange);
+      
+      --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.4);
+      
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      
+      /* Background Waves Colors */
+      --wave-color-1: rgba(255, 102, 0, 0.15);
+      --wave-color-2: rgba(66, 209, 245, 0.15);
+    }
+
+    html[data-theme="light"] {
+      /* LIGHT MODE */
+      --bg-base: #ffffff;
+      --bg-panel: rgba(255, 255, 255, 0.8);
+      --bg-panel-solid: #ffffff;
+      --border-color: rgba(255, 102, 0, 0.2);
+      --text-main: #333333;
+      --text-muted: #666666;
+      
+      --accent-blue: #a3e6f5;
+      --accent-orange: #ff6600;
+      
+      --metric-bg: var(--accent-orange);
+      --metric-text: #ffffff;
+      
+      --preview-bg: #ffcc80;
+      
+      --input-bg-1: #cceeff;
+      --input-bg-2: #ffe6cc;
+      --input-bg-3: #ffcc99;
+      
+      --shadow-soft: 0 12px 30px rgba(255, 102, 0, 0.08);
+      --shadow-hover: 0 16px 40px rgba(255, 102, 0, 0.15);
+
+      /* Background Waves Colors */
+      --wave-color-1: rgba(255, 102, 0, 0.08);
+      --wave-color-2: rgba(66, 209, 245, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { 
+      scroll-behavior: smooth; 
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: all 0.5s ease;
+    }
+
+    /* Latar belakang gelombang dinamis */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      width: 150vw;
+      height: 150vw;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      z-index: -1;
+      animation: waveAnimation 30s infinite linear;
+      opacity: 0.8;
+      transition: background 0.5s ease;
+    }
+    body::before {
+      top: -50%;
+      left: -20%;
+      background: radial-gradient(circle, var(--wave-color-1) 0%, transparent 60%);
+      animation-direction: reverse;
+    }
+    body::after {
+      bottom: -50%;
+      right: -20%;
+      background: radial-gradient(circle, var(--wave-color-2) 0%, transparent 60%);
+    }
+
+    @keyframes waveAnimation {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .shell {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+      padding: 30px 0 60px;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* HEADER */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+    .brand:hover { transform: scale(1.02); }
+
+    .brand img {
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .brand-title-1 { color: var(--accent-blue); transition: color 0.5s ease; }
+    .brand-title-2 { color: var(--accent-orange); transition: color 0.5s ease; }
+
+    .theme-toggle {
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange));
+      border: none;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .theme-toggle svg {
+      width: 22px;
+      height: 22px;
+    }
+    .theme-toggle:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      filter: brightness(1.1);
+    }
+    .theme-toggle:active { transform: translateY(1px); }
+    
+    html[data-theme="light"] .theme-toggle {
+      background: linear-gradient(90deg, #56ccf2, #f2994a);
+    }
+
+    /* HERO SECTION */
+    .hero-card {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 25px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.5s ease;
+    }
+    .hero-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--text-main);
+    }
+    .hero-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-main);
+      opacity: 0.9;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 25px;
+      align-items: start;
+    }
+
+    /* KARTU PANEL (Glassmorphism) */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 25px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-soft);
+      transition: all 0.5s ease;
+    }
+    .panel:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(255, 102, 0, 0.4);
+    }
+
+    /* KONTROL KIRI (Upload & Form) */
+    .panel-left-title {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .dropzone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1; /* Persegi */
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      background: rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    html[data-theme="light"] .dropzone {
+      border-color: rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent-orange);
+      background: rgba(255, 102, 0, 0.05);
+      transform: scale(1.02);
+    }
+    .dropzone .icon-plus {
+      font-size: 60px;
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 10px;
+      color: var(--text-main);
+      transition: transform 0.3s ease;
+    }
+    .dropzone:hover .icon-plus { transform: scale(1.1) rotate(90deg); color: var(--accent-orange); }
+    .dropzone strong { font-size: 16px; font-weight: 600; }
+    .file-input { display: none; }
+
+    /* File Terpilih */
+    .file-card {
+      display: none; /* diubah via JS */
+      background: var(--bg-panel-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeInUp 0.4s ease;
+      position: relative;
+    }
+    .file-card.show { display: block; }
+    .file-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; word-break: break-all; }
+    .file-detail { font-size: 12px; color: var(--text-muted); }
+    .remove-btn {
+      position: absolute;
+      top: -8px; right: -8px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: #ff4757;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s;
+    }
+    .remove-btn:hover { transform: scale(1.15); }
+
+    /* FORM INPUTS */
+    .section-title {
+      color: var(--accent-orange);
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: #000000;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ff6600' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      transition: all 0.3s ease;
+    }
+    select:hover, input:hover { filter: brightness(0.95); transform: translateY(-1px); }
+    select:focus, input:focus { box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.3); }
+
+    /* Warna khusus input berdasarkan desain */
+    #bookSize { background-color: var(--input-bg-1); }
+    #finishing { background-color: var(--input-bg-2); }
+    .mode-select-wrap select { background-color: var(--input-bg-3); }
+    
+    /* Field kustom bawaan JS */
+    .custom-size, .spine-fields {
+      display: none;
+      grid-column: 1 / -1;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .custom-size.show, .spine-fields.show { display: grid; }
+    .custom-size input, .spine-fields input {
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid var(--border-color);
+    }
+    .field-help { font-size: 10px; color: var(--text-muted); margin-top: 4px; grid-column: 1/-1;}
+
+    /* BUTTON BUAT SEKARANG */
+    .primary-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(90deg, #ff9900, #ff6600);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .primary-btn:hover:not(:disabled) {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 25px rgba(255, 102, 0, 0.4);
+    }
+    .primary-btn:active:not(:disabled) { transform: translateY(0); }
+    .primary-btn:disabled {
+      background: #888;
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    .panel-right-title {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .metric-box {
+      background-color: var(--metric-bg);
+      border-radius: var(--radius-md);
+      padding: 12px 10px;
+      text-align: center;
+      transition: background-color 0.5s ease, transform 0.3s ease;
+    }
+    .metric-box:hover { transform: translateY(-3px); }
+    .metric-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--metric-text);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .metric-value {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--metric-text);
+      line-height: 1;
+    }
+
+    /* PREVIEW KANVAS */
+    .previews-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .preview-box {
+      background-color: var(--preview-bg);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: background-color 0.5s ease;
+    }
+    .preview-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--metric-text);
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    /* Container untuk Canvas agar rapi */
+    .canvas-container {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    canvas {
+      max-width: 100%;
+      max-height: 330px;
+      width: auto !important;
+      height: auto !important;
+      object-fit: contain;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      display: none; /* Akan diubah js */
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .placeholder-text {
+      color: rgba(0,0,0,0.4);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Tampilan Gabungan (Combined) JS toggle */
+    .combined-mode .previews-grid { grid-template-columns: 1fr; }
+    .hidden { display: none !important; }
+
+    /* TOMBOL DOWNLOAD */
+    .downloads-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .combined-downloads {
+      grid-template-columns: 1fr;
+    }
+    
+    .download-btn {
+      padding: 18px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .btn-cover { background: var(--accent-orange); }
+    .btn-isi { background: var(--accent-blue); color: #1a1a1a; }
+    
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-4px);
+      filter: brightness(1.1);
+    }
+    .download-btn:disabled {
+      background: #777;
+      color: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* STATUS BOX */
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      text-align: center;
+      display: none;
+      font-weight: 500;
+      animation: fadeInUp 0.3s ease;
+    }
+    .status.show { display: block; }
+    .status.info { background: rgba(66, 209, 245, 0.15); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+    .status.success { background: rgba(103, 232, 165, 0.15); color: #67e8a5; border: 1px solid #67e8a5; }
+    .status.warning { background: rgba(255, 209, 102, 0.15); color: #ffd166; border: 1px solid #ffd166; }
+    .status.error { background: rgba(255, 71, 87, 0.15); color: #ff4757; border: 1px solid #ff4757; }
+    html[data-theme="light"] .status.info { color: #0088aa; border-color: #0088aa; }
+    html[data-theme="light"] .status.success { color: #129955; border-color: #129955; }
+    html[data-theme="light"] .status.error { color: #cc0011; border-color: #cc0011; }
+
+    /* Animasi Loading */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .previews-grid { grid-template-columns: 1fr; }
+      .preview-box { min-height: 350px; }
+      .brand-title-wrap { font-size: 24px; }
+    }
+    @media (max-width: 500px) {
+      .downloads-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .brand img { height: 40px; }
+      .theme-toggle { font-size: 11px; padding: 8px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    
+    <!-- Header Bagian Atas -->
+    <header class="topbar">
+      <a href="#" class="brand">
+        <!-- Logo merujuk pada file yang diberikan -->
+        <img src="gariscetak.png" alt="Logo Garis Cetak" />
+        <div class="brand-title-wrap">
+          <span class="brand-title-1">Garis&nbsp;</span><span class="brand-title-2">Cetak.</span>
+        </div>
+      </a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle Theme"></button>
+    </header>
+
+    <!-- Kotak Info Hero -->
+    <section class="hero-card">
+      <h1 class="hero-title">Layout Buku, Compro Praktis</h1>
+      <p class="hero-desc">
+        Unggah satu PDF buku lengkap. Sistem memisahkan cover dan isi, lalu menghasilkan file siap cetak dalam mode terpisah atau satu PDF gabungan. Ukuran A4 dan A5 tersedia dalam orientasi portrait maupun landscape.
+      </p>
+    </section>
+
+    <!-- Workspace Utama -->
+    <section class="workspace">
+      
+      <!-- KOLOM KIRI: Kontrol dan Form -->
+      <div class="panel">
+        <h2 class="panel-left-title">Drag & Drop Your File</h2>
+        
+        <!-- Area Drop File -->
+        <label class="dropzone" id="dropzone" tabindex="0">
+          <input class="file-input" id="pdfInput" type="file" accept="application/pdf,.pdf" />
+          <div class="icon-plus">+</div>
+          <strong>PDF File Only</strong>
+        </label>
+
+        <!-- Tampilan File Terpilih -->
+        <div class="file-card" id="fileCard">
+          <div class="file-name" id="fileName">-</div>
+          <div class="file-detail" id="fileDetail">-</div>
+          <button class="remove-btn" id="removeFile" type="button" aria-label="Hapus file">×</button>
+        </div>
+
+        <!-- Form Ukuran & Finishing -->
+        <div class="section-title">Ukuran & Finishing</div>
+        
+        <div class="form-grid">
+          <div>
+            <label for="bookSize">Pilih Ukuran</label>
+            <select id="bookSize">
+              <option value="" selected disabled>Pilih ukuran</option>
+              <option value="A4P">A4 Portrait (210×297)</option>
+              <option value="A4L">A4 Landscape (297×210)</option>
+              <option value="A5P">A5 Portrait (148×210)</option>
+              <option value="A5L">A5 Landscape (210×148)</option>
+              <option value="A6P">A6 Portrait (105×148)</option>
+              <option value="A6L">A6 Landscape (148×105)</option>
+              <option value="A7P">A7 Portrait (74×105)</option>
+              <option value="A7L">A7 Landscape (105×74)</option>
+              <option value="CUSTOM">Custom</option>
+            </select>
+          </div>
+          <div>
+            <label for="finishing">Pilih Finishing</label>
+            <select id="finishing">
+              <option value="" selected disabled>Pilih finishing</option>
+              <option id="staplesOption" value="staples">Staples tengah</option>
+              <option value="hotglue">Lem panas</option>
+              <option value="spiral">Spiral</option>
+            </select>
+          </div>
+
+          <!-- Ukuran Kustom (Tampil JS) -->
+          <div class="custom-size" id="customSize">
+            <div>
+              <label for="customWidth">Lebar (mm)</label>
+              <input id="customWidth" type="number" min="50" max="300" step="0.1" value="148" />
+            </div>
+            <div>
+              <label for="customHeight">Tinggi (mm)</label>
+              <input id="customHeight" type="number" min="50" max="450" step="0.1" value="210" />
+            </div>
+          </div>
+
+          <!-- Fields Punggung (Tampil JS Lem Panas) -->
+          <div class="spine-fields" id="spineFields">
+            <div>
+              <label for="paperGsm">Gramatur isi</label>
+              <input id="paperGsm" type="number" min="100" max="150" step="1" value="120" />
+            </div>
+            <div>
+              <label for="paperCaliper">Kaliper (mm)</label>
+              <input id="paperCaliper" type="number" min="0.05" max="0.30" step="0.001" value="0.120" />
+            </div>
+            <div class="field-help">Rentang GSM 100-150. Kaliper = GSM ÷ 1000.</div>
+          </div>
+        </div>
+
+        <!-- Mode Hasil -->
+        <div class="mode-select-wrap">
+          <label for="outputMode">Mode Hasil</label>
+          <select id="outputMode">
+            <option value="separate">Pisahkan PDF cover dan PDF isi</option>
+            <option value="combined">Gabungkan cover dan isi menjadi satu PDF</option>
+          </select>
+        </div>
+
+        <button class="primary-btn" id="generateButton" type="button" disabled>BUAT SEKARANG</button>
+        <div class="status" id="statusBox"></div>
+
+        <!-- ID kosong pembantu state (untuk hide/show dari js asli yg tidak boleh diubah) -->
+        <div id="emptyState" style="display: none;"></div>
+        <div id="resultContent" class="show"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-right-title">Analisis & Hasil</h2>
+        
+        <!-- Metrik Data -->
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Total Halaman</div>
+            <div class="metric-value" id="metricTotal">0</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Halaman Isi</div>
+            <div class="metric-value" id="metricContent">0</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Blank Isi</div>
+            <div class="metric-value" id="metricBlank">0</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Punggung</div>
+            <div class="metric-value" id="metricSpine">0</div>
+          </div>
+        </div>
+
+        <!-- Container Grid Preview -->
+        <div id="resultGrid" class="result-grid">
+          <div class="previews-grid" id="previewsContainer">
+            
+            <!-- Box Preview Cover -->
+            <div class="preview-box" id="coverPreviewPanel">
+              <div class="preview-title">PREVIEW LAYOUT COVER</div>
+              <div class="canvas-container">
+                <canvas id="coverCanvas"></canvas>
+                <div class="placeholder-text" id="coverPlaceholder">Belum ada preview.</div>
+              </div>
+              <span id="coverLabel" style="display:none;"></span> <!-- elemen hidden penampung js -->
+            </div>
+            
+            <!-- Box Preview Isi -->
+            <div class="preview-box" id="contentPreviewPanel">
+              <div class="preview-title">PREVIEW LAYOUT ISI</div>
+              <div class="canvas-container">
+                <canvas id="contentCanvas"></canvas>
+                <div class="placeholder-text" id="contentPlaceholder">Belum ada preview.</div>
+              </div>
+            </div>
+
+            <!-- Box Preview Gabungan (Combined) -->
+            <div class="preview-box hidden combined-preview-panel" id="combinedPreviewPanel">
+              <div class="preview-title">PREVIEW LAYOUT GABUNGAN</div>
+              <div class="canvas-container">
+                <canvas id="combinedCanvas"></canvas>
+                <div class="placeholder-text" id="combinedPlaceholder">Belum ada preview.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tombol Downloads (Mode Terpisah) -->
+        <div class="downloads-grid" id="separateDownloads">
+          <button class="download-btn btn-cover" id="downloadCover" type="button" disabled>DOWNLOAD PDF COVER</button>
+          <button class="download-btn btn-isi" id="downloadContent" type="button" disabled>DOWNLOAD PDF ISI</button>
+        </div>
+
+        <!-- Tombol Downloads (Mode Gabung) -->
+        <div class="downloads-grid combined-downloads hidden" id="combinedDownloads">
+          <button class="download-btn btn-cover" id="downloadCombined" type="button" disabled>DOWNLOAD PDF GABUNGAN</button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  
+  <script>
+  (() => {
+    "use strict";
+
+    const MM = 72 / 25.4;
+    const PTMM = 25.4 / 72;
+    const SIZE_TOLERANCE = 1.5;
+    const CONSISTENCY_TOLERANCE = 0.6;
+    const SAFE_MARGIN = 8;
+    const SEAM_OVERLAP_MM = 0.10;
+    const PRESETS = {
+      A4P: { key: "A4P", label: "A4 Portrait", width: 210, height: 297 },
+      A4L: { key: "A4L", label: "A4 Landscape", width: 297, height: 210 },
+      A5P: { key: "A5P", label: "A5 Portrait", width: 148, height: 210 },
+      A5L: { key: "A5L", label: "A5 Landscape", width: 210, height: 148 },
+      A6P: { key: "A6P", label: "A6 Portrait", width: 105, height: 148 },
+      A6L: { key: "A6L", label: "A6 Landscape", width: 148, height: 105 },
+      A7P: { key: "A7P", label: "A7 Portrait", width: 74, height: 105 },
+      A7L: { key: "A7L", label: "A7 Landscape", width: 105, height: 74 }
+    };
+
+    const $ = id => document.getElementById(id);
+    const ui = {
+      themeToggle: $("themeToggle"), drop: $("dropzone"), input: $("pdfInput"),
+      card: $("fileCard"), name: $("fileName"), detail: $("fileDetail"), remove: $("removeFile"),
+      size: $("bookSize"), finish: $("finishing"), staplesOption: $("staplesOption"),
+      custom: $("customSize"),
+      customWidth: $("customWidth"), customHeight: $("customHeight"), outputMode: $("outputMode"),
+      spineFields: $("spineFields"), gsm: $("paperGsm"), caliper: $("paperCaliper"),
+      generate: $("generateButton"), status: $("statusBox"), empty: $("emptyState"),
+      result: $("resultContent"), resultGrid: $("resultGrid"),
+      coverPreviewPanel: $("coverPreviewPanel"),
+      contentPreviewPanel: $("contentPreviewPanel"), combinedPreviewPanel: $("combinedPreviewPanel"),
+      coverCanvas: $("coverCanvas"),
+      contentCanvas: $("contentCanvas"), combinedCanvas: $("combinedCanvas"),
+      coverPlaceholder: $("coverPlaceholder"),
+      contentPlaceholder: $("contentPlaceholder"), combinedPlaceholder: $("combinedPlaceholder"),
+      metricTotal: $("metricTotal"), metricContent: $("metricContent"), metricBlank: $("metricBlank"),
+      metricSpine: $("metricSpine"), coverLabel: $("coverLabel"),
+      separateDownloads: $("separateDownloads"), combinedDownloads: $("combinedDownloads"),
+      downloadCover: $("downloadCover"), downloadContent: $("downloadContent"),
+      downloadCombined: $("downloadCombined")
+    };
+
+    const state = {
+      file: null,
+      sourceBytes: null,
+      sourcePdf: null,
+      meta: null,
+      coverBytes: null,
+      contentBytes: null,
+      combinedBytes: null,
+      plan: null
+    };
+
+    if (!window.pdfjsLib || !window.PDFLib) {
+      showStatus("Library PDF gagal dimuat. Pastikan internet aktif lalu muat ulang.", "error");
+      return;
+    }
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    const mmToPt = value => value * MM;
+    const ptToMm = value => value * PTMM;
+    const round = (value, digits = 2) => Math.round(value * 10 ** digits) / 10 ** digits;
+    const fmt = value => new Intl.NumberFormat("id-ID").format(value);
+    const escapeHtml = value => String(value)
+      .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+    const fileSize = bytes => bytes < 1048576
+      ? `${(bytes / 1024).toFixed(1)} KB`
+      : `${(bytes / 1048576).toFixed(1)} MB`;
+    const blankCount = pages => (4 - pages % 4) % 4;
+    const finishingLabel = () => ({
+      staples: "Staples tengah", hotglue: "Lem panas", spiral: "Spiral"
+    })[ui.finish.value];
+    const contentMethod = () => ui.finish.value === "staples"
+      ? "Saddle Stitched" : "Cut Stacks Duplex";
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("cg-book-theme", theme);
+      const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+      const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+      ui.themeToggle.innerHTML = theme === "dark" ? sunIcon : moonIcon;
+    }
+
+    function showStatus(message, type = "info") {
+      ui.status.className = `status show ${type}`;
+      ui.status.innerHTML = message;
+    }
+
+    function clearStatus() {
+      ui.status.className = "status";
+      ui.status.textContent = "";
+    }
+
+    function targetSize() {
+      if (!ui.size.value) return null;
+
+      if (ui.size.value === "CUSTOM") {
+        const width = Number(ui.customWidth.value);
+        const height = Number(ui.customHeight.value);
+        return {
+          key: "CUSTOM", label: "Custom", width, height,
+          orientation: width > height ? "Landscape" : "Portrait"
+        };
+      }
+
+      const preset = PRESETS[ui.size.value];
+      if (!preset) return null;
+
+      return {
+        ...preset,
+        orientation: preset.width > preset.height ? "Landscape" : "Portrait"
+      };
+    }
+
+    function spineWidth(totalContentPages) {
+      if (ui.finish.value !== "hotglue") return 0;
+      return round((totalContentPages / 2) * Number(ui.caliper.value), 3);
+    }
+
+    function isCombined() {
+      return ui.outputMode.value === "combined";
+    }
+
+    function combinedOption() {
+      return ui.outputMode.querySelector('option[value="combined"]');
+    }
+
+    function syncOutputRules() {
+      const blocked = ui.finish.value === "hotglue";
+      combinedOption().disabled = blocked;
+      if (blocked && isCombined()) ui.outputMode.value = "separate";
+    }
+
+    function syncFinishingRules() {
+      const blockStaples = ui.size.value === "A4L";
+      ui.staplesOption.disabled = blockStaples;
+
+      if (blockStaples && ui.finish.value === "staples") {
+        ui.finish.value = "";
+        ui.spineFields.classList.remove("show");
+        return true;
+      }
+
+      return false;
+    }
+
+    function a4LandscapeSeparateBlankSlots() {
+      if (!state.meta) return 0;
+      const midpoint = Math.ceil(state.meta.totalPages / 2);
+      const topLength = Math.max(0, midpoint - 2);
+      const bottomLength = Math.max(0, state.meta.totalPages - midpoint);
+      return Math.abs(bottomLength - topLength);
+    }
+
+    function displayedBlankCount() {
+      if (!state.meta) return 0;
+      if (isCombined()) return blankCount(state.meta.totalPages);
+
+      if (ui.finish.value === "spiral") return state.meta.blanks;
+
+      const target = targetSize();
+      if (target?.key === "A4L") return a4LandscapeSeparateBlankSlots();
+      return state.meta.blanks;
+    }
+
+    function canGenerate() {
+      if (!state.meta || !state.sourceBytes) return false;
+      if (!ui.size.value || !ui.finish.value) return false;
+      if (ui.size.value === "A4L" && ui.finish.value === "staples") return false;
+      if (state.meta.totalPages < 4) return false;
+      if (ui.finish.value === "hotglue" && state.meta.contentPages < 60) return false;
+      if (ui.finish.value === "hotglue" && isCombined()) return false;
+      return true;
+    }
+
+    function updateGenerateButton() {
+      ui.generate.disabled = !canGenerate();
+      ui.generate.textContent = isCombined()
+        ? "Buat Satu PDF Siap Cetak"
+        : "BUAT SEKARANG";
+    }
+
+    function setBusy(active, label = "Memproses") {
+      ui.generate.disabled = active || !canGenerate();
+      ui.generate.innerHTML = active
+        ? `<span class="spinner"></span>${escapeHtml(label)}`
+        : (isCombined() ? "Buat Satu PDF Siap Cetak" : "BUAT SEKARANG");
+    }
+
+    function resetPreview(canvas, placeholder) {
+      canvas.style.display = "none";
+      placeholder.style.display = "block";
+    }
+
+    function clearOutputs() {
+      state.coverBytes = null;
+      state.contentBytes = null;
+      state.combinedBytes = null;
+      state.plan = null;
+      ui.downloadCover.disabled = true;
+      ui.downloadContent.disabled = true;
+      ui.downloadCombined.disabled = true;
+      if (ui.coverLabel) ui.coverLabel.textContent = "Belum dibuat";
+      resetPreview(ui.coverCanvas, ui.coverPlaceholder);
+      resetPreview(ui.contentCanvas, ui.contentPlaceholder);
+      resetPreview(ui.combinedCanvas, ui.combinedPlaceholder);
+      if (state.meta) {
+        ui.metricBlank.textContent = fmt(displayedBlankCount());
+        ui.metricSpine.textContent = ui.finish.value === "hotglue"
+          ? `${spineWidth(state.meta.contentTotalPages)} mm`
+          : "0";
+      }
+      updateDownloadMode();
+    }
+
+    function updateDownloadMode() {
+      syncOutputRules();
+      const combined = isCombined();
+      ui.separateDownloads.classList.toggle("hidden", combined);
+      ui.combinedDownloads.classList.toggle("hidden", !combined);
+      ui.coverPreviewPanel.classList.toggle("hidden", combined);
+      ui.contentPreviewPanel.classList.toggle("hidden", combined);
+      ui.combinedPreviewPanel.classList.toggle("hidden", !combined);
+      ui.resultGrid.classList.toggle("combined-mode", combined);
+      if (state.meta) ui.metricBlank.textContent = fmt(displayedBlankCount());
+      updateGenerateButton();
+    }
+
+    function resetAll() {
+      state.file = null;
+      state.sourceBytes = null;
+      state.sourcePdf = null;
+      state.meta = null;
+      clearOutputs();
+      ui.input.value = "";
+      ui.card.classList.remove("show");
+      if(ui.empty) ui.empty.style.display = "grid";
+      if(ui.result) ui.result.classList.remove("show");
+      ui.metricTotal.textContent = "0";
+      ui.metricContent.textContent = "0";
+      ui.metricBlank.textContent = "0";
+      ui.metricSpine.textContent = "0";
+      clearStatus();
+      updateGenerateButton();
+    }
+
+    async function loadFile(file) {
+      if (!file) return;
+      if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        showStatus("File ditolak. Unggah PDF.", "error");
+        return;
+      }
+
+      resetAll();
+      state.file = file;
+      ui.name.textContent = file.name;
+      ui.detail.textContent = `${fileSize(file.size)} • membaca PDF`;
+      ui.card.classList.add("show");
+      showStatus("Membaca struktur halaman buku…", "info");
+
+      try {
+        const buffer = await file.arrayBuffer();
+        state.sourceBytes = buffer.slice(0);
+        state.sourcePdf = await pdfjsLib.getDocument({
+          data: new Uint8Array(buffer.slice(0))
+        }).promise;
+        state.meta = await analyzePdf(state.sourcePdf);
+
+        ui.detail.textContent = `${fileSize(file.size)} • ${fmt(state.meta.totalPages)} halaman • ${round(state.meta.widthMm)} × ${round(state.meta.heightMm)} mm`;
+        renderMeta();
+        if(ui.empty) ui.empty.style.display = "none";
+        if(ui.result) ui.result.classList.add("show");
+        updateDownloadMode();
+
+        if (!state.meta.consistent) {
+          showStatus("Ukuran atau orientasi halaman berbeda. Setiap halaman akan disesuaikan proporsional ke ukuran jadi yang dipilih.", "warning");
+        } else if (state.meta.totalPages < 4) {
+          showStatus("PDF minimal berisi empat halaman.", "error");
+        } else if (ui.finish.value === "hotglue" && state.meta.contentPages < 60) {
+          showStatus(`Lem panas minimal 60 halaman isi. File ini hanya memiliki ${state.meta.contentPages} halaman isi.`, "error");
+        } else if (!ui.size.value || !ui.finish.value) {
+          showStatus("PDF berhasil dianalisis. Pilih ukuran jadi dan finishing untuk melanjutkan.", "success");
+        } else {
+          showStatus("PDF berhasil dianalisis. Pilih mode hasil lalu buat layout.", "success");
+        }
+        updateGenerateButton();
+      } catch (error) {
+        console.error(error);
+        resetAll();
+        showStatus(`PDF gagal dibaca: ${escapeHtml(error.message || "file rusak atau terenkripsi")}.`, "error");
+      }
+    }
+
+    async function analyzePdf(pdf) {
+      const sizes = [];
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+        sizes.push({
+          widthMm: ptToMm(viewport.width),
+          heightMm: ptToMm(viewport.height),
+          orientation: viewport.width > viewport.height ? "Landscape" : "Portrait"
+        });
+      }
+      const first = sizes[0];
+      const consistent = sizes.every(size =>
+        Math.abs(size.widthMm - first.widthMm) <= CONSISTENCY_TOLERANCE &&
+        Math.abs(size.heightMm - first.heightMm) <= CONSISTENCY_TOLERANCE &&
+        size.orientation === first.orientation
+      );
+      const contentPages = Math.max(0, pdf.numPages - 2);
+      const blanks = blankCount(contentPages);
+      return {
+        totalPages: pdf.numPages,
+        contentPages,
+        blanks,
+        contentTotalPages: contentPages + blanks,
+        widthMm: first.widthMm,
+        heightMm: first.heightMm,
+        orientation: first.orientation,
+        consistent
+      };
+    }
+
+    function renderMeta() {
+      const meta = state.meta;
+      ui.metricTotal.textContent = fmt(meta.totalPages);
+      ui.metricContent.textContent = fmt(meta.contentPages);
+      ui.metricBlank.textContent = fmt(displayedBlankCount());
+      ui.metricSpine.textContent = ui.finish.value === "hotglue"
+        ? `${spineWidth(meta.contentTotalPages)}`
+        : "0";
+    }
+
+    async function renderPage(pdf, pageNumber, canvas, placeholder) {
+      const page = await pdf.getPage(pageNumber);
+      const base = page.getViewport({ scale: 1 });
+      const scale = Math.min(700 / base.width, 500 / base.height, 1.8);
+      const viewport = page.getViewport({ scale });
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      const context = canvas.getContext("2d", { alpha: false });
+      canvas.width = Math.floor(viewport.width * pixelRatio);
+      canvas.height = Math.floor(viewport.height * pixelRatio);
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+      canvas.style.display = "block";
+      placeholder.style.display = "none";
+      await page.render({
+        canvasContext: context,
+        viewport,
+        transform: pixelRatio !== 1 ? [pixelRatio, 0, 0, pixelRatio, 0, 0] : null
+      }).promise;
+    }
+
+    function validateJob() {
+      if (!state.meta) throw new Error("Unggah PDF terlebih dahulu.");
+      if (!ui.size.value) throw new Error("Pilih ukuran jadi terlebih dahulu.");
+      if (!ui.finish.value) throw new Error("Pilih finishing terlebih dahulu.");
+      if (ui.size.value === "A4L" && ui.finish.value === "staples") {
+        throw new Error("A4 Landscape tidak mendukung finishing Staples tengah.");
+      }
+      if (state.meta.totalPages < 4) throw new Error("PDF minimal empat halaman.");
+      if (ui.finish.value === "hotglue" && state.meta.contentPages < 60) {
+        throw new Error(`Lem panas minimal 60 halaman isi. File hanya memiliki ${state.meta.contentPages} halaman isi.`);
+      }
+      if (ui.finish.value === "hotglue" && isCombined()) {
+        throw new Error("Lem panas tidak dapat menggunakan mode cover dan isi digabung.");
+      }
+
+      const target = targetSize();
+      if (!target) throw new Error("Pilih ukuran jadi terlebih dahulu.");
+      if (![target.width, target.height].every(value => Number.isFinite(value) && value > 0)) {
+        throw new Error("Ukuran custom tidak valid.");
+      }
+      
+      if (ui.finish.value === "hotglue") {
+        const gsm = Number(ui.gsm.value);
+        const caliper = Number(ui.caliper.value);
+        if (!Number.isFinite(gsm) || gsm < 100 || gsm > 150) {
+          throw new Error("Gramatur lem panas harus 100–150 gsm.");
+        }
+        if (!Number.isFinite(caliper) || caliper <= 0) {
+          throw new Error("Kaliper kertas tidak valid.");
+        }
+      }
+      return { target };
+    }
+
+    function buildPairs(totalPages, finishing) {
+      const output = [];
+      const sheetCount = totalPages / 4;
+      if (finishing === "staples") {
+        for (let i = 0; i < sheetCount; i += 1) {
+          output.push({ number: output.length + 1, side: `Depan ${i + 1}`, first: totalPages - 2 * i, second: 1 + 2 * i });
+          output.push({ number: output.length + 1, side: `Belakang ${i + 1}`, first: 2 + 2 * i, second: totalPages - 1 - 2 * i });
+        }
+      } else {
+        const half = totalPages / 2;
+        for (let i = 0; i < sheetCount; i += 1) {
+          output.push({ number: output.length + 1, side: `Depan ${i + 1}`, first: 2 * i + 1, second: half + 2 * i + 1 });
+          output.push({ number: output.length + 1, side: `Belakang ${i + 1}`, first: half + 2 * i + 2, second: 2 * i + 2 });
+        }
+      }
+      return output;
+    }
+
+    function validatePairs(pairs, totalPages, finishing) {
+      const sorted = pairs.flatMap(pair => [pair.first, pair.second]).sort((a, b) => a - b);
+      if (sorted.length !== totalPages || sorted.some((value, index) => value !== index + 1)) {
+        throw new Error("Mapping halaman memiliki nomor hilang atau duplikat.");
+      }
+      if (finishing !== "staples") {
+        const half = totalPages / 2;
+        const expected = [[1, half + 1], [half + 2, 2], [3, half + 3], [half + 4, 4]];
+        for (let i = 0; i < Math.min(4, pairs.length); i += 1) {
+          if (pairs[i].first !== expected[i][0] || pairs[i].second !== expected[i][1]) {
+            throw new Error(`Validasi Cut Stacks gagal pada output ${i + 1}.`);
+          }
+        }
+      }
+    }
+
+    function makeOrigins(sheet, unitWidth, unitHeight, columns, rows) {
+      const origins = [];
+      const startX = (sheet.width - columns * unitWidth) / 2;
+      const startY = (sheet.height - rows * unitHeight) / 2;
+      for (let row = 0; row < rows; row += 1) {
+        for (let column = 0; column < columns; column += 1) {
+          origins.push({
+            x: startX + column * unitWidth,
+            y: startY + (rows - 1 - row) * unitHeight
+          });
+        }
+      }
+      return origins;
+    }
+
+    function chooseGenericLayout(unitWidth, unitHeight) {
+      const options = [
+        { width: 325, height: 485, orientation: "Portrait" },
+        { width: 485, height: 325, orientation: "Landscape" }
+      ].map(sheet => {
+        const columns = Math.floor((sheet.width - SAFE_MARGIN * 2) / unitWidth);
+        const rows = Math.floor((sheet.height - SAFE_MARGIN * 2) / unitHeight);
+        return { sheet, unitWidth, unitHeight, columns, rows, repeats: columns * rows };
+      }).filter(option => option.repeats > 0);
+      if (!options.length) {
+        throw new Error(`Unit ${round(unitWidth)} × ${round(unitHeight)} mm tidak muat pada media 325 × 485 mm.`);
+      }
+      options.sort((a, b) => b.repeats - a.repeats ||
+        ((a.sheet.width * a.sheet.height - a.repeats * unitWidth * unitHeight) -
+         (b.sheet.width * b.sheet.height - b.repeats * unitWidth * unitHeight)));
+      const best = options[0];
+      best.origins = makeOrigins(best.sheet, unitWidth, unitHeight, best.columns, best.rows);
+      return best;
+    }
+
+    function contentLayout(target) {
+      if (target.key === "A4P") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        return { axis: "horizontal", sheet, unitWidth: 420, unitHeight: 297, repeats: 1, origins: makeOrigins(sheet, 420, 297, 1, 1) };
+      }
+      if (target.key === "A5P") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        return { axis: "horizontal", sheet, unitWidth: 296, unitHeight: 210, repeats: 2, origins: makeOrigins(sheet, 296, 210, 1, 2) };
+      }
+      if (target.key === "A4L") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        return { axis: "vertical", sheet, unitWidth: 297, unitHeight: 420, repeats: 1, origins: makeOrigins(sheet, 297, 420, 1, 1) };
+      }
+      if (target.key === "A5L") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = 420;
+        const unitHeight = 148;
+        return { axis: "horizontal", sheet, unitWidth, unitHeight, repeats: 2, origins: makeOrigins(sheet, unitWidth, unitHeight, 1, 2), lockedLandscape: true, saddleLogicSameAsPortrait: true };
+      }
+      if (target.key === "A6P") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = 210;
+        const unitHeight = 148;
+        return { axis: "horizontal", sheet, unitWidth, unitHeight, repeats: 4, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 2), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A6L") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        const unitWidth = 296;
+        const unitHeight = 105;
+        return { axis: "horizontal", sheet, unitWidth, unitHeight, repeats: 4, origins: makeOrigins(sheet, unitWidth, unitHeight, 1, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A7P") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        const unitWidth = 148;
+        const unitHeight = 105;
+        return { axis: "horizontal", sheet, unitWidth, unitHeight, repeats: 8, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A7L") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = 210;
+        const unitHeight = 74;
+        return { axis: "horizontal", sheet, unitWidth, unitHeight, repeats: 8, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      const axis = target.orientation === "Landscape" ? "vertical" : "horizontal";
+      const unitWidth = axis === "horizontal" ? target.width * 2 : target.width;
+      const unitHeight = axis === "horizontal" ? target.height : target.height * 2;
+      return { axis, ...chooseGenericLayout(unitWidth, unitHeight) };
+    }
+
+    function mapSequencePairs(sequence, numericPairs) {
+      return numericPairs.map(pair => ({
+        number: pair.number,
+        side: pair.side,
+        firstItem: sequence[pair.first - 1] ?? null,
+        secondItem: sequence[pair.second - 1] ?? null
+      }));
+    }
+
+    function removeEmptySpiralPlacements(placements) {
+      return placements
+        .filter(item => item.firstItem !== null || item.secondItem !== null)
+        .map((item, index) => ({
+          ...item,
+          number: index + 1,
+          side: item.side.startsWith("Output") ? `Output ${index + 1}` : item.side
+        }));
+    }
+
+    function createSequentialHalfPlacements(sequence) {
+      if (sequence.length % 2 !== 0) sequence.push(null);
+      const half = sequence.length / 2;
+      const placements = [];
+      for (let index = 0; index < half; index += 1) {
+        placements.push({ number: index + 1, side: `Output ${index + 1}`, firstItem: sequence[index] ?? null, secondItem: sequence[half + index] ?? null });
+      }
+      return placements;
+    }
+
+    function createSeparateA4LandscapePlacements() {
+      const midpoint = Math.ceil(state.meta.totalPages / 2);
+      const top = [];
+      const bottom = [];
+      for (let sourcePage = 2; sourcePage <= midpoint - 1; sourcePage += 1) top.push(sourcePage - 1);
+      for (let sourcePage = midpoint; sourcePage <= state.meta.totalPages - 1; sourcePage += 1) bottom.push(sourcePage - 1);
+      const count = Math.max(top.length, bottom.length);
+      const placements = [];
+      for (let index = 0; index < count; index += 1) {
+        placements.push({ number: index + 1, side: `Output ${index + 1}`, firstItem: top[index] ?? null, secondItem: bottom[index] ?? null });
+      }
+      return placements;
+    }
+
+    function createCoverLayout(target, finishing, spine) {
+      if (target.key === "A6P") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = target.width * 2 + spine;
+        const unitHeight = target.height;
+        if (unitWidth * 2 + SAFE_MARGIN * 2 > sheet.width || unitHeight * 2 + SAFE_MARGIN * 2 > sheet.height) throw new Error(`Cover A6 Portrait dengan punggung ${spine} mm tidak muat 4-up.`);
+        return { mode: "horizontal-spread", sheet, unitWidth, unitHeight, repeats: 4, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 2), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A6L") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        const unitWidth = target.width * 2 + spine;
+        const unitHeight = target.height;
+        if (unitWidth * 1 + SAFE_MARGIN * 2 > sheet.width || unitHeight * 4 + SAFE_MARGIN * 2 > sheet.height) throw new Error(`Cover A6 Landscape dengan punggung ${spine} mm tidak muat 4-up.`);
+        return { mode: "horizontal-spread", sheet, unitWidth, unitHeight, repeats: 4, origins: makeOrigins(sheet, unitWidth, unitHeight, 1, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A7P") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        const unitWidth = target.width * 2 + spine;
+        const unitHeight = target.height;
+        if (unitWidth * 2 + SAFE_MARGIN * 2 > sheet.width || unitHeight * 4 + SAFE_MARGIN * 2 > sheet.height) throw new Error(`Cover A7 Portrait dengan punggung ${spine} mm tidak muat 8-up.`);
+        return { mode: "horizontal-spread", sheet, unitWidth, unitHeight, repeats: 8, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A7L") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = target.width * 2 + spine;
+        const unitHeight = target.height;
+        if (unitWidth * 2 + SAFE_MARGIN * 2 > sheet.width || unitHeight * 4 + SAFE_MARGIN * 2 > sheet.height) throw new Error(`Cover A7 Landscape dengan punggung ${spine} mm tidak muat 8-up.`);
+        return { mode: "horizontal-spread", sheet, unitWidth, unitHeight, repeats: 8, origins: makeOrigins(sheet, unitWidth, unitHeight, 2, 4), lockedFourUp: true, gapX: 0, gapY: 0 };
+      }
+      if (target.key === "A5L" && finishing === "spiral") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        return { mode: "a5l-spiral-grid", sheet, unitWidth: 420, unitHeight: 296, repeats: 2, origins: makeOrigins(sheet, 420, 296, 1, 1), lockedLandscape: true };
+      }
+      if (target.key === "A5L") {
+        const sheet = { width: 485, height: 325, orientation: "Landscape" };
+        const unitWidth = target.width * 2 + spine;
+        const unitHeight = target.height;
+        const rows = Math.floor((sheet.height - SAFE_MARGIN * 2) / unitHeight);
+        if (unitWidth + SAFE_MARGIN * 2 > sheet.width || rows < 1) throw new Error(`Cover A5 landscape tidak muat.`);
+        return { mode: "horizontal-spread", sheet, unitWidth, unitHeight, repeats: rows, origins: makeOrigins(sheet, unitWidth, unitHeight, 1, rows), lockedLandscape: true };
+      }
+      if (target.key === "A4L") {
+        const sheet = { width: 325, height: 485, orientation: "Portrait" };
+        const unitHeight = target.height * 2 + spine;
+        if (unitHeight + SAFE_MARGIN * 2 > sheet.height) throw new Error(`Cover A4 landscape dengan punggung ${spine} mm tidak muat.`);
+        return { mode: "vertical-spread", sheet, unitWidth: target.width, unitHeight, repeats: 1, origins: makeOrigins(sheet, target.width, unitHeight, 1, 1) };
+      }
+      return { mode: "horizontal-spread", ...chooseGenericLayout(target.width * 2 + spine, target.height) };
+    }
+
+    function assertLockedPresetGeometry(plan) {
+      const key = plan.target.key;
+      const content = plan.content;
+      if (key === "A5L") {
+        if (content.sheet.width !== 485 || content.sheet.height !== 325 || content.sheet.orientation !== "Landscape" || content.axis !== "horizontal" || content.unitWidth !== 420 || content.unitHeight !== 148 || content.repeats !== 2) throw new Error("Konfigurasi booklet A5 Landscape tidak sesuai.");
+        if (plan.mode === "separate" && (plan.cover.sheet.width !== 485 || plan.cover.sheet.height !== 325 || plan.cover.sheet.orientation !== "Landscape")) throw new Error("Layout cover A5 Landscape tidak menggunakan media landscape.");
+      }
+      if (key === "A6P") {
+        if (content.sheet.width !== 485 || content.sheet.height !== 325 || content.sheet.orientation !== "Landscape" || content.axis !== "horizontal" || content.unitWidth !== 210 || content.unitHeight !== 148 || content.repeats !== 4 || content.origins.length !== 4 || content.gapX !== 0 || content.gapY !== 0) throw new Error("A6 Portrait harus 4-up pada media landscape.");
+        if (plan.mode === "separate" && (plan.cover.sheet.width !== 485 || plan.cover.sheet.height !== 325 || plan.cover.sheet.orientation !== "Landscape" || plan.cover.repeats !== 4)) throw new Error("Cover A6 Portrait harus 4-up pada media landscape.");
+      }
+      if (key === "A6L") {
+        if (content.sheet.width !== 325 || content.sheet.height !== 485 || content.sheet.orientation !== "Portrait" || content.axis !== "horizontal" || content.unitWidth !== 296 || content.unitHeight !== 105 || content.repeats !== 4 || content.origins.length !== 4 || content.gapX !== 0 || content.gapY !== 0) throw new Error("A6 Landscape harus 4-up pada media portrait.");
+        if (plan.mode === "separate" && (plan.cover.sheet.width !== 325 || plan.cover.sheet.height !== 485 || plan.cover.sheet.orientation !== "Portrait" || plan.cover.repeats !== 4)) throw new Error("Cover A6 Landscape harus 4-up pada media portrait.");
+      }
+      if (key === "A7P") {
+        if (content.sheet.width !== 325 || content.sheet.height !== 485 || content.sheet.orientation !== "Portrait" || content.axis !== "horizontal" || content.unitWidth !== 148 || content.unitHeight !== 105 || content.repeats !== 8 || content.origins.length !== 8 || content.gapX !== 0 || content.gapY !== 0) throw new Error("A7 Portrait harus 8-up pada media portrait.");
+        if (plan.mode === "separate" && (plan.cover.sheet.width !== 325 || plan.cover.sheet.height !== 485 || plan.cover.sheet.orientation !== "Portrait" || plan.cover.repeats !== 8)) throw new Error("Cover A7 Portrait harus 8-up pada media portrait.");
+      }
+      if (key === "A7L") {
+        if (content.sheet.width !== 485 || content.sheet.height !== 325 || content.sheet.orientation !== "Landscape" || content.axis !== "horizontal" || content.unitWidth !== 210 || content.unitHeight !== 74 || content.repeats !== 8 || content.origins.length !== 8 || content.gapX !== 0 || content.gapY !== 0) throw new Error("A7 Landscape harus 8-up pada media landscape.");
+        if (plan.mode === "separate" && (plan.cover.sheet.width !== 485 || plan.cover.sheet.height !== 325 || plan.cover.sheet.orientation !== "Landscape" || plan.cover.repeats !== 8)) throw new Error("Cover A7 Landscape harus 8-up pada media landscape.");
+      }
+      return plan;
+    }
+
+    function createSeparatePlan(validation) {
+      const target = validation.target;
+      let placements;
+      let layoutBlanks;
+      let method;
+
+      if (ui.finish.value === "spiral") {
+        const contentSequence = [];
+        for (let sourceIndex = 1; sourceIndex < state.meta.totalPages - 1; sourceIndex += 1) contentSequence.push(sourceIndex);
+        for (let index = 0; index < state.meta.blanks; index += 1) contentSequence.push(null);
+        if (target.key === "A4L") {
+          placements = createSequentialHalfPlacements([...contentSequence]);
+          method = "Sequential Half Stack";
+        } else {
+          const numericPairs = buildPairs(contentSequence.length, "spiral");
+          validatePairs(numericPairs, contentSequence.length, "spiral");
+          placements = mapSequencePairs(contentSequence, numericPairs);
+          method = contentMethod();
+        }
+        layoutBlanks = state.meta.blanks;
+        placements = removeEmptySpiralPlacements(placements);
+      } else if (target.key === "A4L") {
+        placements = createSeparateA4LandscapePlacements();
+        layoutBlanks = placements.filter(item => item.firstItem === null || item.secondItem === null).length;
+        method = "Sequential Half Stack";
+      } else {
+        const sequence = [];
+        for (let sourceIndex = 1; sourceIndex < state.meta.totalPages - 1; sourceIndex += 1) sequence.push(sourceIndex);
+        for (let index = 0; index < state.meta.blanks; index += 1) sequence.push(null);
+        const numericPairs = buildPairs(sequence.length, ui.finish.value);
+        validatePairs(numericPairs, sequence.length, ui.finish.value);
+        placements = mapSequencePairs(sequence, numericPairs);
+        layoutBlanks = state.meta.blanks;
+        method = contentMethod();
+      }
+
+      const content = contentLayout(target);
+      const spine = spineWidth(state.meta.contentTotalPages);
+      const cover = createCoverLayout(target, ui.finish.value, spine);
+
+      return assertLockedPresetGeometry({
+        mode: "separate", target, finishing: ui.finish.value, method, placements, content, cover, spine, layoutBlanks,
+        blankPosition: ui.finish.value === "spiral" ? "setelah isi terakhir dan sebelum cover belakang" : "akhir isi"
+      });
+    }
+
+    function createCombinedPlan(validation) {
+      const target = validation.target;
+      const addedBlanks = blankCount(state.meta.totalPages);
+      const sequence = [];
+
+      if (ui.finish.value === "spiral") {
+        for (let sourceIndex = 0; sourceIndex < state.meta.totalPages; sourceIndex += 1) sequence.push(sourceIndex);
+        for (let index = 0; index < addedBlanks; index += 1) sequence.push(null);
+      } else {
+        for (let sourceIndex = 0; sourceIndex < state.meta.totalPages - 1; sourceIndex += 1) sequence.push(sourceIndex);
+        for (let index = 0; index < addedBlanks; index += 1) sequence.push(null);
+        sequence.push(state.meta.totalPages - 1);
+      }
+
+      let placements;
+      let method;
+      if (target.key === "A4L") {
+        placements = createSequentialHalfPlacements([...sequence]);
+        method = "Sequential Half Stack";
+      } else {
+        const numericPairs = buildPairs(sequence.length, ui.finish.value);
+        validatePairs(numericPairs, sequence.length, ui.finish.value);
+        placements = mapSequencePairs(sequence, numericPairs);
+        method = contentMethod();
+      }
+
+      if (ui.finish.value === "spiral") placements = removeEmptySpiralPlacements(placements);
+
+      return assertLockedPresetGeometry({
+        mode: "combined", target, finishing: ui.finish.value, method, placements, content: contentLayout(target), addedBlanks,
+        blankPosition: ui.finish.value === "spiral" ? "setelah cover belakang" : "sebelum cover belakang"
+      });
+    }
+
+    function createPlan(validation) {
+      return isCombined() ? createCombinedPlan(validation) : createSeparatePlan(validation);
+    }
+
+    function drawAdjustedPage(page, embeddedPage, box, exactFill = false) {
+      if (exactFill) {
+        page.drawPage(embeddedPage, { x: box.x, y: box.y, width: box.width, height: box.height });
+        return;
+      }
+      const scale = Math.min(box.width / embeddedPage.width, box.height / embeddedPage.height);
+      const width = embeddedPage.width * scale;
+      const height = embeddedPage.height * scale;
+      page.drawPage(embeddedPage, { x: box.x + (box.width - width) / 2, y: box.y + (box.height - height) / 2, width, height });
+    }
+
+    function drawSourceItem(page, embeddedPages, sourceIndex, box, exactFill = false) {
+      if (sourceIndex === null || sourceIndex === undefined) {
+        page.drawRectangle({ ...box, color: PDFLib.rgb(1, 1, 1) });
+        return;
+      }
+      drawAdjustedPage(page, embeddedPages[sourceIndex], box, exactFill);
+    }
+
+    function expandTightBox(box, origin, layout) {
+      const overlap = mmToPt(SEAM_OVERLAP_MM);
+      const xs = layout.origins.map(item => item.x);
+      const ys = layout.origins.map(item => item.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const expanded = { ...box };
+
+      if (origin.x > minX) { expanded.x -= overlap; expanded.width += overlap; }
+      if (origin.x < maxX) { expanded.width += overlap; }
+      if (origin.y > minY) { expanded.y -= overlap; expanded.height += overlap; }
+      if (origin.y < maxY) { expanded.height += overlap; }
+      return expanded;
+    }
+
+    function drawCornerMarks(page, unit) {
+      const color = PDFLib.rgb(.05, .05, .05);
+      const thickness = .35;
+      const mark = mmToPt(5);
+      const offset = mmToPt(2);
+      const left = unit.x, right = unit.x + unit.width;
+      const bottom = unit.y, top = unit.y + unit.height;
+      const lines = [
+        [[left-offset-mark,bottom],[left-offset,bottom]], [[left,bottom-offset-mark],[left,bottom-offset]],
+        [[right+offset,bottom],[right+offset+mark,bottom]], [[right,bottom-offset-mark],[right,bottom-offset]],
+        [[left-offset-mark,top],[left-offset,top]], [[left,top+offset],[left,top+offset+mark]],
+        [[right+offset,top],[right+offset+mark,top]], [[right,top+offset],[right,top+offset+mark]]
+      ];
+      for (const [start, end] of lines) page.drawLine({ start: { x: start[0], y: start[1] }, end: { x: end[0], y: end[1] }, thickness, color });
+    }
+
+    function drawVerticalMiddleMarks(page, unit) {
+      const x = unit.x + unit.width / 2;
+      const color = PDFLib.rgb(.05, .05, .05), thickness = .35;
+      const mark = mmToPt(5), offset = mmToPt(2);
+      page.drawLine({ start:{x,y:unit.y-offset-mark}, end:{x,y:unit.y-offset}, thickness, color });
+      page.drawLine({ start:{x,y:unit.y+unit.height+offset}, end:{x,y:unit.y+unit.height+offset+mark}, thickness, color });
+    }
+
+    function drawHorizontalMiddleMarks(page, unit) {
+      const y = unit.y + unit.height / 2;
+      const color = PDFLib.rgb(.05, .05, .05), thickness = .35;
+      const mark = mmToPt(5), offset = mmToPt(2);
+      page.drawLine({ start:{x:unit.x-offset-mark,y}, end:{x:unit.x-offset,y}, thickness, color });
+      page.drawLine({ start:{x:unit.x+unit.width+offset,y}, end:{x:unit.x+unit.width+offset+mark,y}, thickness, color });
+    }
+
+    function drawHorizontalSideCenterMarks(page, unit) {
+      const y = unit.y + unit.height / 2;
+      const color = PDFLib.rgb(.05, .05, .05), thickness = .35;
+      const mark = mmToPt(5), offset = mmToPt(2);
+      page.drawLine({ start:{x:unit.x-offset-mark,y}, end:{x:unit.x-offset,y}, thickness, color });
+      page.drawLine({ start:{x:unit.x+unit.width+offset,y}, end:{x:unit.x+unit.width+offset+mark,y}, thickness, color });
+    }
+
+    function drawTightGridMarks(page, layout, addPageDivisionMarks = false) {
+      const origins = layout.origins;
+      const unitWidth = mmToPt(layout.unitWidth);
+      const unitHeight = mmToPt(layout.unitHeight);
+      const xs = [...new Set(origins.map(origin => round(origin.x, 6)))].sort((a, b) => a - b);
+      const ys = [...new Set(origins.map(origin => round(origin.y, 6)))].sort((a, b) => a - b);
+      const left = mmToPt(xs[0]), bottom = mmToPt(ys[0]), right = mmToPt(xs[xs.length - 1]) + unitWidth, top = mmToPt(ys[ys.length - 1]) + unitHeight;
+      const block = { x:left, y:bottom, width:right-left, height:top-bottom };
+
+      drawCornerMarks(page, block);
+
+      const color = PDFLib.rgb(.05, .05, .05), thickness = .35, mark = mmToPt(5), offset = mmToPt(2);
+      for (const boundaryXmm of xs.slice(1)) {
+        const x = mmToPt(boundaryXmm);
+        page.drawLine({ start:{x, y:bottom-offset-mark}, end:{x, y:bottom-offset}, thickness, color });
+        page.drawLine({ start:{x, y:top+offset}, end:{x, y:top+offset+mark}, thickness, color });
+      }
+      for (const boundaryYmm of ys.slice(1)) {
+        const y = mmToPt(boundaryYmm);
+        page.drawLine({ start:{x:left-offset-mark, y}, end:{x:left-offset, y}, thickness, color });
+        page.drawLine({ start:{x:right+offset, y}, end:{x:right+offset+mark, y}, thickness, color });
+      }
+      if (addPageDivisionMarks) {
+        for (const originXmm of xs) {
+          const x = mmToPt(originXmm) + unitWidth / 2;
+          page.drawLine({ start:{x, y:bottom-offset-mark}, end:{x, y:bottom-offset}, thickness, color });
+          page.drawLine({ start:{x, y:top+offset}, end:{x, y:top+offset+mark}, thickness, color });
+        }
+      }
+    }
+
+    function drawSlug(page, text, sheetWidthPt) {
+      page.drawText(text, { x: mmToPt(4), y: mmToPt(2.3), size: 5.5, color: PDFLib.rgb(.28, .28, .28), maxWidth: sheetWidthPt - mmToPt(8) });
+    }
+
+    async function generateSequencePdf(plan, label) {
+      const { PDFDocument, rgb } = PDFLib;
+      const source = await PDFDocument.load(state.sourceBytes.slice(0));
+      const output = await PDFDocument.create();
+      const embedded = await output.embedPages(source.getPages());
+      const sheetWidth = mmToPt(plan.content.sheet.width);
+      const sheetHeight = mmToPt(plan.content.sheet.height);
+      const pageWidth = mmToPt(plan.target.width);
+      const pageHeight = mmToPt(plan.target.height);
+
+      for (const placement of plan.placements) {
+        const outputPage = output.addPage([sheetWidth, sheetHeight]);
+        outputPage.drawRectangle({ x:0, y:0, width:sheetWidth, height:sheetHeight, color:rgb(1,1,1) });
+
+        const tightA5Stack = (plan.target.key === "A5P" || plan.target.key === "A5L") && plan.content.axis === "horizontal" && plan.content.repeats === 2 && plan.content.origins.length === 2;
+        const tightFourUp = plan.content.lockedFourUp === true && plan.content.repeats >= 4 && plan.content.origins.length === plan.content.repeats;
+
+        for (const origin of plan.content.origins) {
+          const x = mmToPt(origin.x), y = mmToPt(origin.y);
+          let firstBox = plan.content.axis === "horizontal" ? { x, y, width:pageWidth, height:pageHeight } : { x, y:y+pageHeight, width:pageWidth, height:pageHeight };
+          let secondBox = plan.content.axis === "horizontal" ? { x:x+pageWidth, y, width:pageWidth, height:pageHeight } : { x, y, width:pageWidth, height:pageHeight };
+          const tightLayout = tightA5Stack || tightFourUp;
+
+          if (tightLayout) {
+            firstBox = expandTightBox(firstBox, origin, plan.content);
+            secondBox = expandTightBox(secondBox, origin, plan.content);
+            const overlap = mmToPt(SEAM_OVERLAP_MM);
+            if (plan.content.axis === "horizontal") { firstBox.width += overlap; secondBox.x -= overlap; secondBox.width += overlap; } 
+            else { firstBox.y -= overlap; firstBox.height += overlap; secondBox.height += overlap; }
+          }
+          drawSourceItem(outputPage, embedded, placement.firstItem, firstBox, tightLayout);
+          drawSourceItem(outputPage, embedded, placement.secondItem, secondBox, tightLayout);
+
+          if (tightLayout) continue;
+          const hasFirst = placement.firstItem !== null && placement.firstItem !== undefined;
+          const hasSecond = placement.secondItem !== null && placement.secondItem !== undefined;
+
+          if (plan.finishing === "spiral" && hasFirst !== hasSecond) {
+            drawCornerMarks(outputPage, hasFirst ? firstBox : secondBox);
+          } else {
+            const unit = { x, y, width: mmToPt(plan.content.unitWidth), height: mmToPt(plan.content.unitHeight) };
+            drawCornerMarks(outputPage, unit);
+            if (plan.finishing !== "staples") {
+              if (plan.content.axis === "horizontal") drawVerticalMiddleMarks(outputPage, unit);
+              else drawHorizontalMiddleMarks(outputPage, unit);
+            }
+          }
+        }
+        if (tightA5Stack) {
+          const minX = Math.min(...plan.content.origins.map(origin => origin.x)), minY = Math.min(...plan.content.origins.map(origin => origin.y));
+          const combinedUnit = { x: mmToPt(minX), y: mmToPt(minY), width: mmToPt(plan.content.unitWidth), height: mmToPt(plan.content.unitHeight * 2) };
+          drawCornerMarks(outputPage, combinedUnit);
+          drawHorizontalSideCenterMarks(outputPage, combinedUnit);
+          if (plan.finishing !== "staples") drawVerticalMiddleMarks(outputPage, combinedUnit);
+        }
+        if (tightFourUp) drawTightGridMarks(outputPage, plan.content, plan.finishing !== "staples");
+        drawSlug(outputPage, `${label} • OUT ${placement.number} • ${placement.side} • ${plan.method}`, sheetWidth);
+      }
+      return output.save({ useObjectStreams:true, addDefaultPage:false });
+    }
+
+    async function generateCoverPdf(plan) {
+      const { PDFDocument, rgb } = PDFLib;
+      const source = await PDFDocument.load(state.sourceBytes.slice(0));
+      const output = await PDFDocument.create();
+      const front = source.getPage(0);
+      const back = source.getPage(state.meta.totalPages - 1);
+      const [embeddedFront, embeddedBack] = await output.embedPages([front, back]);
+
+      let innerBackStrip = null, innerFrontStrip = null;
+      if (plan.finishing === "hotglue" && plan.spine > 0) {
+        const strip = Math.min(mmToPt(5), front.getWidth() / 3);
+        innerBackStrip = await output.embedPage(back, { left: back.getWidth() - strip, bottom: 0, right: back.getWidth(), top: back.getHeight() });
+        innerFrontStrip = await output.embedPage(front, { left: 0, bottom: 0, right: strip, top: front.getHeight() });
+      }
+
+      const sheetWidth = mmToPt(plan.cover.sheet.width), sheetHeight = mmToPt(plan.cover.sheet.height);
+      const coverWidth = mmToPt(plan.target.width), coverHeight = mmToPt(plan.target.height);
+      const spine = mmToPt(plan.spine);
+      const outputPage = output.addPage([sheetWidth, sheetHeight]);
+      outputPage.drawRectangle({ x:0, y:0, width:sheetWidth, height:sheetHeight, color:rgb(1,1,1) });
+
+      const tightA5CoverStack = plan.target.key === "A5P" && plan.cover.mode === "horizontal-spread" && plan.cover.repeats === 2 && plan.cover.origins.length === 2;
+      const tightFourUpCover = plan.cover.lockedFourUp === true && plan.cover.repeats >= 4 && plan.cover.origins.length === plan.cover.repeats;
+
+      for (const origin of plan.cover.origins) {
+        const x = mmToPt(origin.x), y = mmToPt(origin.y);
+        const exactTightCover = tightA5CoverStack || tightFourUpCover;
+        const tightCoverBox = box => exactTightCover ? expandTightBox(box, origin, plan.cover) : box;
+
+        if (plan.cover.mode === "a5l-spiral-grid") {
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x:x+coverWidth, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          drawAdjustedPage(outputPage, embeddedFront, tightCoverBox({ x, y:y+coverHeight, width:coverWidth, height:coverHeight }), exactTightCover);
+          drawAdjustedPage(outputPage, embeddedFront, tightCoverBox({ x:x+coverWidth, y:y+coverHeight, width:coverWidth, height:coverHeight }), exactTightCover);
+          const unit = { x, y, width:coverWidth*2, height:coverHeight*2 };
+          drawCornerMarks(outputPage, unit); drawVerticalMiddleMarks(outputPage, unit); drawHorizontalMiddleMarks(outputPage, unit);
+          continue;
+        }
+
+        if (plan.cover.mode === "vertical-spread") {
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          if (plan.finishing === "hotglue" && spine > 0) {
+            outputPage.drawPage(innerBackStrip, { x, y:y+coverHeight, width:coverWidth/2, height:spine });
+            outputPage.drawPage(innerFrontStrip, { x:x+coverWidth/2, y:y+coverHeight, width:coverWidth/2, height:spine });
+          }
+          drawAdjustedPage(outputPage, embeddedFront, { x, y:y+coverHeight+spine, width:coverWidth, height:coverHeight });
+          const unit = { x, y, width:coverWidth, height:mmToPt(plan.cover.unitHeight) };
+          drawCornerMarks(outputPage, unit);
+          if (plan.finishing === "spiral") drawHorizontalMiddleMarks(outputPage, unit);
+          continue;
+        }
+
+        if (plan.finishing === "spiral") {
+          drawAdjustedPage(outputPage, embeddedFront, tightCoverBox({ x, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x:x+coverWidth, y, width:coverWidth, height:coverHeight }), exactTightCover);
+        } else if (plan.finishing === "hotglue") {
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          if (spine > 0) {
+            outputPage.drawPage(innerBackStrip, { x:x+coverWidth, y, width:spine/2, height:coverHeight });
+            outputPage.drawPage(innerFrontStrip, { x:x+coverWidth+spine/2, y, width:spine/2, height:coverHeight });
+          }
+          drawAdjustedPage(outputPage, embeddedFront, { x:x+coverWidth+spine, y, width:coverWidth, height:coverHeight });
+        } else {
+          drawAdjustedPage(outputPage, embeddedBack, tightCoverBox({ x, y, width:coverWidth, height:coverHeight }), exactTightCover);
+          drawAdjustedPage(outputPage, embeddedFront, tightCoverBox({ x:x+coverWidth, y, width:coverWidth, height:coverHeight }), exactTightCover);
+        }
+
+        if (!tightA5CoverStack && !tightFourUpCover) {
+          const unit = { x, y, width:mmToPt(plan.cover.unitWidth), height:coverHeight };
+          drawCornerMarks(outputPage, unit);
+          if (plan.finishing === "spiral") drawVerticalMiddleMarks(outputPage, unit);
+        }
+      }
+
+      if (tightA5CoverStack) {
+        const minX = Math.min(...plan.cover.origins.map(origin => origin.x)), minY = Math.min(...plan.cover.origins.map(origin => origin.y));
+        const combinedCover = { x: mmToPt(minX), y: mmToPt(minY), width: mmToPt(plan.cover.unitWidth), height: mmToPt(plan.cover.unitHeight * 2) };
+        drawCornerMarks(outputPage, combinedCover);
+        drawHorizontalSideCenterMarks(outputPage, combinedCover);
+        if (plan.finishing === "spiral") drawVerticalMiddleMarks(outputPage, combinedCover);
+      }
+
+      if (tightFourUpCover) drawTightGridMarks(outputPage, plan.cover, plan.finishing === "spiral");
+
+      const slug = plan.finishing === "hotglue" ? `COVER • LEM PANAS • PUNGGUNG ${plan.spine} mm • ${plan.cover.repeats}-UP` : `COVER • ${finishingLabel()} • ${plan.cover.repeats}-SET`;
+      drawSlug(outputPage, slug, sheetWidth);
+      return output.save({ useObjectStreams:true, addDefaultPage:false });
+    }
+
+    function renderPlan(plan) {
+      if (plan.mode === "combined") {
+        ui.metricBlank.textContent = fmt(plan.addedBlanks);
+        return;
+      }
+      ui.metricBlank.textContent = fmt(plan.layoutBlanks);
+      ui.metricSpine.textContent = plan.finishing === "hotglue" ? `${plan.spine} mm` : "0";
+      if(ui.coverLabel) ui.coverLabel.textContent = plan.cover.mode === "a5l-spiral-grid"
+        ? "2 set • 2 depan atas + 2 belakang bawah" : (plan.finishing === "hotglue" ? `${plan.cover.repeats}-up • spine ${plan.spine} mm` : `${plan.cover.repeats}-set`);
+    }
+
+    async function renderGeneratedPdf(bytes, canvas, placeholder) {
+      const pdf = await pdfjsLib.getDocument({ data:new Uint8Array(bytes.slice(0)) }).promise;
+      await renderPage(pdf, 1, canvas, placeholder);
+      pdf.destroy();
+    }
+
+    async function generate() {
+      try {
+        clearStatus();
+        setBusy(true, "Memvalidasi file");
+        const validation = validateJob();
+        const plan = createPlan(validation);
+        state.plan = plan;
+
+        if (plan.mode === "combined") {
+          showStatus("Membuat satu layout dari seluruh urutan halaman…", "info");
+          setBusy(true, "Membuat PDF gabungan");
+          state.combinedBytes = await generateSequencePdf(plan, "BUKU GABUNGAN");
+          state.coverBytes = null;
+          state.contentBytes = null;
+          renderPlan(plan);
+          await renderGeneratedPdf(state.combinedBytes, ui.combinedCanvas, ui.combinedPlaceholder);
+          ui.downloadCombined.disabled = false;
+          const combinedBlankMessage = plan.addedBlanks ? `${plan.addedBlanks} halaman padding ditempatkan ${plan.blankPosition} dan slot kosong tidak dibuat sebagai halaman output. ` : "";
+          const landscapeNote = plan.target.key === "A5L" ? "Media output dikunci 485 × 325 mm landscape; ukuran jadi halaman 210 × 148 mm. " : plan.target.key === "A6P" ? "A6 Portrait dibuat 4-up pada media 485 × 325 mm landscape. " : plan.target.key === "A6L" ? "A6 Landscape dibuat 4-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7P" ? "A7 Portrait dibuat 8-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7L" ? "A7 Landscape dibuat 8-up pada media 485 × 325 mm landscape. " : "";
+          showStatus(`${combinedBlankMessage}${landscapeNote}Semua halaman telah disesuaikan proporsional ke ukuran jadi. PDF gabungan siap diunduh.`, "success");
+        } else {
+          showStatus("Membuat layout cover dan layout isi…", "info");
+          setBusy(true, "Membuat dua PDF");
+          [state.coverBytes, state.contentBytes] = await Promise.all([
+            generateCoverPdf(plan),
+            generateSequencePdf(plan, "ISI")
+          ]);
+          state.combinedBytes = null;
+          renderPlan(plan);
+          await Promise.all([
+            renderGeneratedPdf(state.coverBytes, ui.coverCanvas, ui.coverPlaceholder),
+            renderGeneratedPdf(state.contentBytes, ui.contentCanvas, ui.contentPlaceholder)
+          ]);
+          ui.downloadCover.disabled = false;
+          ui.downloadContent.disabled = false;
+          const separateBlankMessage = plan.layoutBlanks ? (plan.finishing === "spiral" ? `${plan.layoutBlanks} halaman kosong ditambahkan setelah isi terakhir dan sebelum cover belakang; jika isi sudah kelipatan 4, tidak ada halaman kosong tambahan. ` : `${plan.layoutBlanks} slot kosong digunakan untuk menyeimbangkan layout isi. `) : "";
+          const landscapeNote = plan.target.key === "A5L" ? "Media cover dan isi dikunci 485 × 325 mm landscape; ukuran jadi halaman 210 × 148 mm. " : plan.target.key === "A6P" ? "Cover dan isi A6 Portrait dibuat 4-up pada media 485 × 325 mm landscape. " : plan.target.key === "A6L" ? "Cover dan isi A6 Landscape dibuat 4-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7P" ? "Cover dan isi A7 Portrait dibuat 8-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7L" ? "Cover dan isi A7 Landscape dibuat 8-up pada media 485 × 325 mm landscape. " : "";
+          showStatus(`${separateBlankMessage}${landscapeNote}Cover dan isi telah disesuaikan proporsional ke ukuran jadi. Dua PDF siap diunduh.`, "success");
+        }
+      } catch (error) {
+        console.error(error);
+        state.coverBytes = state.contentBytes = state.combinedBytes = null;
+        ui.downloadCover.disabled = ui.downloadContent.disabled = ui.downloadCombined.disabled = true;
+        showStatus(escapeHtml(error.message || "Gagal membuat layout."), "error");
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function download(bytes, filename) {
+      const url = URL.createObjectURL(new Blob([bytes], { type:"application/pdf" }));
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    ui.themeToggle.addEventListener("click", () => {
+      applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
+    });
+    ui.downloadCover.addEventListener("click", () => state.coverBytes && download(state.coverBytes, "01_COVER_LAYOUT_SIAP_CETAK.pdf"));
+    ui.downloadContent.addEventListener("click", () => state.contentBytes && download(state.contentBytes, "02_ISI_LAYOUT_SIAP_CETAK.pdf"));
+    ui.downloadCombined.addEventListener("click", () => state.combinedBytes && download(state.combinedBytes, "01_LAYOUT_BUKU_GABUNGAN_SIAP_CETAK.pdf"));
+    ui.input.addEventListener("change", event => loadFile(event.target.files?.[0]));
+    ui.drop.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); ui.input.click(); }
+    });
+    ["dragenter", "dragover"].forEach(name => ui.drop.addEventListener(name, event => {
+      event.preventDefault(); ui.drop.classList.add("dragover");
+    }));
+    ["dragleave", "drop"].forEach(name => ui.drop.addEventListener(name, event => {
+      event.preventDefault(); ui.drop.classList.remove("dragover");
+    }));
+    ui.drop.addEventListener("drop", event => loadFile(event.dataTransfer?.files?.[0]));
+    ui.remove.addEventListener("click", resetAll);
+    ui.generate.addEventListener("click", generate);
+
+    ui.size.addEventListener("change", () => {
+      ui.custom.classList.toggle("show", ui.size.value === "CUSTOM");
+      const staplesWasReset = syncFinishingRules();
+      syncOutputRules();
+      clearOutputs();
+      if(state.meta) renderMeta();
+      updateGenerateButton();
+
+      if (ui.size.value === "A4L") {
+        showStatus(staplesWasReset ? "A4 Landscape tidak mendukung Staples tengah. Pilihan finishing dikembalikan ke Pilih finishing." : "A4 Landscape dipilih. Opsi Staples tengah dinonaktifkan.", "warning");
+      } else if (state.meta && (!ui.size.value || !ui.finish.value)) {
+        showStatus("Pilih ukuran jadi dan finishing untuk melanjutkan.", "info");
+      } else if (state.meta) {
+        showStatus("Ukuran jadi diperbarui. Buat ulang layout untuk menerapkan perubahan.", "info");
+      }
+    });
+
+    ui.finish.addEventListener("change", () => {
+      if (ui.size.value === "A4L" && ui.finish.value === "staples") {
+        ui.finish.value = "";
+        showStatus("A4 Landscape tidak mendukung finishing Staples tengah.", "error");
+      }
+      syncFinishingRules();
+      syncOutputRules();
+      ui.spineFields.classList.toggle("show", ui.finish.value === "hotglue");
+      clearOutputs();
+
+      if (state.meta && ui.finish.value === "hotglue" && state.meta.contentPages < 60) {
+        showStatus(`Lem panas minimal 60 halaman isi. File ini hanya memiliki ${state.meta.contentPages} halaman isi.`, "error");
+      } else if (state.meta && (!ui.size.value || !ui.finish.value)) {
+        showStatus("Pilih ukuran jadi dan finishing untuk melanjutkan.", "info");
+      } else if (state.meta) {
+        showStatus("Finishing diperbarui. Buat ulang layout untuk menerapkan perubahan.", "info");
+      }
+
+      updateDownloadMode();
+    });
+
+    ui.outputMode.addEventListener("change", () => {
+      syncOutputRules();
+      clearOutputs();
+      updateDownloadMode();
+      if (state.meta) {
+        showStatus(isCombined() ? "Mode gabungan aktif. Seluruh halaman diperlakukan sebagai satu urutan layout." : "Mode terpisah aktif. Cover dan isi akan dibuat menjadi dua PDF.", "info");
+      }
+    });
+
+    ui.gsm.addEventListener("input", () => {
+      const value = Number(ui.gsm.value);
+      if (Number.isFinite(value) && value > 0) ui.caliper.value = (value / 1000).toFixed(3);
+      clearOutputs();
+      updateGenerateButton();
+    });
+
+    [ui.customWidth, ui.customHeight, ui.caliper].forEach(control =>
+      control.addEventListener("change", () => {
+        clearOutputs();
+        if(state.meta) renderMeta();
+        updateGenerateButton();
+      })
+    );
+
+    applyTheme(localStorage.getItem("cg-book-theme") || "dark");
+    syncFinishingRules();
+    syncOutputRules();
+    resetAll();
+    ui.spineFields.classList.toggle("show", ui.finish.value === "hotglue");
+    updateDownloadMode();
+  })();
+  </script>
+</body>
+</html>
