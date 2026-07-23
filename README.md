@@ -1,0 +1,2 @@
+# gariscetak
+garis cetak
