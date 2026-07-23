@@ -332,7 +332,7 @@
 
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
       margin-bottom: 15px;
     }
@@ -368,7 +368,8 @@
     select:focus, input:focus { box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.3); }
 
     /* Warna khusus input berdasarkan desain */
-    #bookSize { background-color: var(--input-bg-1); }
+    #bookSize, #bookOrientation { background-color: var(--input-bg-1); }
+    #bookOrientation:disabled { opacity: 0.5; cursor: not-allowed; }
     #finishing { background-color: var(--input-bg-2); }
     .mode-select-wrap select { background-color: var(--input-bg-3); }
     
@@ -490,21 +491,33 @@
       flex: 1;
       width: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      justify-content: flex-start;
+      overflow-y: auto;
+      max-height: 450px;
+      gap: 15px;
+      padding: 10px 0;
+    }
+    
+    .canvas-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .canvas-container::-webkit-scrollbar-thumb {
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+    html[data-theme="light"] .canvas-container::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.2);
     }
     
     canvas {
       max-width: 100%;
-      max-height: 330px;
-      width: auto !important;
       height: auto !important;
       object-fit: contain;
       background: white;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       border-radius: 4px;
-      display: none; /* Akan diubah js */
       animation: fadeInUp 0.5s ease;
     }
     
@@ -624,9 +637,9 @@
 
     <!-- Kotak Info Hero -->
     <section class="hero-card">
-      <h1 class="hero-title">Layout Buku, Compro Praktis</h1>
+      <h1 class="hero-title">Layout Buku & Compro Praktis</h1>
       <p class="hero-desc">
-        Unggah satu PDF buku lengkap. Sistem memisahkan cover dan isi, lalu menghasilkan file siap cetak dalam mode terpisah atau satu PDF gabungan. Ukuran A4 dan A5 tersedia dalam orientasi portrait maupun landscape.
+        Unggah satu PDF buku lengkap. Sistem memisahkan cover dan isi, lalu menghasilkan file siap cetak dalam mode terpisah atau satu PDF gabungan. Ukuran A4, A5, A6 & A7 tersedia dalam orientasi portrait maupun landscape.
       </p>
     </section>
 
@@ -656,22 +669,26 @@
         
         <div class="form-grid">
           <div>
-            <label for="bookSize">Pilih Ukuran</label>
+            <label for="bookSize">PILIH UKURAN</label>
             <select id="bookSize">
               <option value="" selected disabled>Pilih ukuran</option>
-              <option value="A4P">A4 Portrait (210×297)</option>
-              <option value="A4L">A4 Landscape (297×210)</option>
-              <option value="A5P">A5 Portrait (148×210)</option>
-              <option value="A5L">A5 Landscape (210×148)</option>
-              <option value="A6P">A6 Portrait (105×148)</option>
-              <option value="A6L">A6 Landscape (148×105)</option>
-              <option value="A7P">A7 Portrait (74×105)</option>
-              <option value="A7L">A7 Landscape (105×74)</option>
+              <option value="A4">A4 (210×297)</option>
+              <option value="A5">A5 (148×210)</option>
+              <option value="A6">A6 (105×148)</option>
+              <option value="A7">A7 (74×105)</option>
               <option value="CUSTOM">Custom</option>
             </select>
           </div>
           <div>
-            <label for="finishing">Pilih Finishing</label>
+            <label for="bookOrientation">PILIH ORIENTASI</label>
+            <select id="bookOrientation">
+              <option value="" selected disabled>Pilih orientasi</option>
+              <option value="P">Portrait</option>
+              <option value="L">Landscape</option>
+            </select>
+          </div>
+          <div>
+            <label for="finishing">PILIH FINISHING</label>
             <select id="finishing">
               <option value="" selected disabled>Pilih finishing</option>
               <option id="staplesOption" value="staples">Staples tengah</option>
@@ -698,11 +715,11 @@
               <label for="paperGsm">Gramatur isi</label>
               <input id="paperGsm" type="number" min="100" max="150" step="1" value="120" />
             </div>
-            <div>
+            <div style="display: none;">
               <label for="paperCaliper">Kaliper (mm)</label>
               <input id="paperCaliper" type="number" min="0.05" max="0.30" step="0.001" value="0.120" />
             </div>
-            <div class="field-help">Rentang GSM 100-150. Kaliper = GSM ÷ 1000.</div>
+            <div class="field-help">Rentang GSM 100-150. (Ketebalan buku dikalkulasi otomatis)</div>
           </div>
         </div>
 
@@ -753,8 +770,7 @@
             <!-- Box Preview Cover -->
             <div class="preview-box" id="coverPreviewPanel">
               <div class="preview-title">PREVIEW LAYOUT COVER</div>
-              <div class="canvas-container">
-                <canvas id="coverCanvas"></canvas>
+              <div class="canvas-container" id="coverContainer">
                 <div class="placeholder-text" id="coverPlaceholder">Belum ada preview.</div>
               </div>
               <span id="coverLabel" style="display:none;"></span> <!-- elemen hidden penampung js -->
@@ -763,8 +779,7 @@
             <!-- Box Preview Isi -->
             <div class="preview-box" id="contentPreviewPanel">
               <div class="preview-title">PREVIEW LAYOUT ISI</div>
-              <div class="canvas-container">
-                <canvas id="contentCanvas"></canvas>
+              <div class="canvas-container" id="contentContainer">
                 <div class="placeholder-text" id="contentPlaceholder">Belum ada preview.</div>
               </div>
             </div>
@@ -772,8 +787,7 @@
             <!-- Box Preview Gabungan (Combined) -->
             <div class="preview-box hidden combined-preview-panel" id="combinedPreviewPanel">
               <div class="preview-title">PREVIEW LAYOUT GABUNGAN</div>
-              <div class="canvas-container">
-                <canvas id="combinedCanvas"></canvas>
+              <div class="canvas-container" id="combinedContainer">
                 <div class="placeholder-text" id="combinedPlaceholder">Belum ada preview.</div>
               </div>
             </div>
@@ -824,7 +838,7 @@
     const ui = {
       themeToggle: $("themeToggle"), drop: $("dropzone"), input: $("pdfInput"),
       card: $("fileCard"), name: $("fileName"), detail: $("fileDetail"), remove: $("removeFile"),
-      size: $("bookSize"), finish: $("finishing"), staplesOption: $("staplesOption"),
+      size: $("bookSize"), orientation: $("bookOrientation"), finish: $("finishing"), staplesOption: $("staplesOption"),
       custom: $("customSize"),
       customWidth: $("customWidth"), customHeight: $("customHeight"), outputMode: $("outputMode"),
       spineFields: $("spineFields"), gsm: $("paperGsm"), caliper: $("paperCaliper"),
@@ -832,8 +846,8 @@
       result: $("resultContent"), resultGrid: $("resultGrid"),
       coverPreviewPanel: $("coverPreviewPanel"),
       contentPreviewPanel: $("contentPreviewPanel"), combinedPreviewPanel: $("combinedPreviewPanel"),
-      coverCanvas: $("coverCanvas"),
-      contentCanvas: $("contentCanvas"), combinedCanvas: $("combinedCanvas"),
+      coverContainer: $("coverContainer"),
+      contentContainer: $("contentContainer"), combinedContainer: $("combinedContainer"),
       coverPlaceholder: $("coverPlaceholder"),
       contentPlaceholder: $("contentPlaceholder"), combinedPlaceholder: $("combinedPlaceholder"),
       metricTotal: $("metricTotal"), metricContent: $("metricContent"), metricBlank: $("metricBlank"),
@@ -908,8 +922,10 @@
           orientation: width > height ? "Landscape" : "Portrait"
         };
       }
+      
+      if (!ui.orientation.value) return null;
 
-      const preset = PRESETS[ui.size.value];
+      const preset = PRESETS[ui.size.value + ui.orientation.value];
       if (!preset) return null;
 
       return {
@@ -938,7 +954,8 @@
     }
 
     function syncFinishingRules() {
-      const blockStaples = ui.size.value === "A4L";
+      const target = targetSize();
+      const blockStaples = target?.key === "A4L";
       ui.staplesOption.disabled = blockStaples;
 
       if (blockStaples && ui.finish.value === "staples") {
@@ -971,8 +988,9 @@
 
     function canGenerate() {
       if (!state.meta || !state.sourceBytes) return false;
-      if (!ui.size.value || !ui.finish.value) return false;
-      if (ui.size.value === "A4L" && ui.finish.value === "staples") return false;
+      const target = targetSize();
+      if (!target || !ui.finish.value) return false;
+      if (target.key === "A4L" && ui.finish.value === "staples") return false;
       if (state.meta.totalPages < 4) return false;
       if (ui.finish.value === "hotglue" && state.meta.contentPages < 60) return false;
       if (ui.finish.value === "hotglue" && isCombined()) return false;
@@ -993,8 +1011,8 @@
         : (isCombined() ? "Buat Satu PDF Siap Cetak" : "BUAT SEKARANG");
     }
 
-    function resetPreview(canvas, placeholder) {
-      canvas.style.display = "none";
+    function resetPreview(container, placeholder) {
+      Array.from(container.querySelectorAll('canvas')).forEach(c => c.remove());
       placeholder.style.display = "block";
     }
 
@@ -1007,9 +1025,9 @@
       ui.downloadContent.disabled = true;
       ui.downloadCombined.disabled = true;
       if (ui.coverLabel) ui.coverLabel.textContent = "Belum dibuat";
-      resetPreview(ui.coverCanvas, ui.coverPlaceholder);
-      resetPreview(ui.contentCanvas, ui.contentPlaceholder);
-      resetPreview(ui.combinedCanvas, ui.combinedPlaceholder);
+      resetPreview(ui.coverContainer, ui.coverPlaceholder);
+      resetPreview(ui.contentContainer, ui.contentPlaceholder);
+      resetPreview(ui.combinedContainer, ui.combinedPlaceholder);
       if (state.meta) {
         ui.metricBlank.textContent = fmt(displayedBlankCount());
         ui.metricSpine.textContent = ui.finish.value === "hotglue"
@@ -1084,8 +1102,8 @@
           showStatus("PDF minimal berisi empat halaman.", "error");
         } else if (ui.finish.value === "hotglue" && state.meta.contentPages < 60) {
           showStatus(`Lem panas minimal 60 halaman isi. File ini hanya memiliki ${state.meta.contentPages} halaman isi.`, "error");
-        } else if (!ui.size.value || !ui.finish.value) {
-          showStatus("PDF berhasil dianalisis. Pilih ukuran jadi dan finishing untuk melanjutkan.", "success");
+        } else if (!targetSize() || !ui.finish.value) {
+          showStatus("PDF berhasil dianalisis. Pilih ukuran jadi, orientasi, dan finishing untuk melanjutkan.", "success");
         } else {
           showStatus("PDF berhasil dianalisis. Pilih mode hasil lalu buat layout.", "success");
         }
@@ -1138,7 +1156,7 @@
         : "0";
     }
 
-    async function renderPage(pdf, pageNumber, canvas, placeholder) {
+    async function renderPage(pdf, pageNumber, canvas) {
       const page = await pdf.getPage(pageNumber);
       const base = page.getViewport({ scale: 1 });
       const scale = Math.min(700 / base.width, 500 / base.height, 1.8);
@@ -1149,8 +1167,6 @@
       canvas.height = Math.floor(viewport.height * pixelRatio);
       canvas.style.width = `${Math.floor(viewport.width)}px`;
       canvas.style.height = `${Math.floor(viewport.height)}px`;
-      canvas.style.display = "block";
-      placeholder.style.display = "none";
       await page.render({
         canvasContext: context,
         viewport,
@@ -1160,9 +1176,10 @@
 
     function validateJob() {
       if (!state.meta) throw new Error("Unggah PDF terlebih dahulu.");
-      if (!ui.size.value) throw new Error("Pilih ukuran jadi terlebih dahulu.");
+      const target = targetSize();
+      if (!target) throw new Error("Pilih ukuran jadi dan orientasi terlebih dahulu.");
       if (!ui.finish.value) throw new Error("Pilih finishing terlebih dahulu.");
-      if (ui.size.value === "A4L" && ui.finish.value === "staples") {
+      if (target.key === "A4L" && ui.finish.value === "staples") {
         throw new Error("A4 Landscape tidak mendukung finishing Staples tengah.");
       }
       if (state.meta.totalPages < 4) throw new Error("PDF minimal empat halaman.");
@@ -1173,8 +1190,6 @@
         throw new Error("Lem panas tidak dapat menggunakan mode cover dan isi digabung.");
       }
 
-      const target = targetSize();
-      if (!target) throw new Error("Pilih ukuran jadi terlebih dahulu.");
       if (![target.width, target.height].every(value => Number.isFinite(value) && value > 0)) {
         throw new Error("Ukuran custom tidak valid.");
       }
@@ -1785,9 +1800,15 @@
         ? "2 set • 2 depan atas + 2 belakang bawah" : (plan.finishing === "hotglue" ? `${plan.cover.repeats}-up • spine ${plan.spine} mm` : `${plan.cover.repeats}-set`);
     }
 
-    async function renderGeneratedPdf(bytes, canvas, placeholder) {
+    async function renderGeneratedPdf(bytes, container, placeholder) {
       const pdf = await pdfjsLib.getDocument({ data:new Uint8Array(bytes.slice(0)) }).promise;
-      await renderPage(pdf, 1, canvas, placeholder);
+      Array.from(container.querySelectorAll('canvas')).forEach(c => c.remove());
+      placeholder.style.display = "none";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+        await renderPage(pdf, i, canvas);
+      }
       pdf.destroy();
     }
 
@@ -1806,7 +1827,7 @@
           state.coverBytes = null;
           state.contentBytes = null;
           renderPlan(plan);
-          await renderGeneratedPdf(state.combinedBytes, ui.combinedCanvas, ui.combinedPlaceholder);
+          await renderGeneratedPdf(state.combinedBytes, ui.combinedContainer, ui.combinedPlaceholder);
           ui.downloadCombined.disabled = false;
           const combinedBlankMessage = plan.addedBlanks ? `${plan.addedBlanks} halaman padding ditempatkan ${plan.blankPosition} dan slot kosong tidak dibuat sebagai halaman output. ` : "";
           const landscapeNote = plan.target.key === "A5L" ? "Media output dikunci 485 × 325 mm landscape; ukuran jadi halaman 210 × 148 mm. " : plan.target.key === "A6P" ? "A6 Portrait dibuat 4-up pada media 485 × 325 mm landscape. " : plan.target.key === "A6L" ? "A6 Landscape dibuat 4-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7P" ? "A7 Portrait dibuat 8-up pada media 325 × 485 mm portrait. " : plan.target.key === "A7L" ? "A7 Landscape dibuat 8-up pada media 485 × 325 mm landscape. " : "";
@@ -1821,8 +1842,8 @@
           state.combinedBytes = null;
           renderPlan(plan);
           await Promise.all([
-            renderGeneratedPdf(state.coverBytes, ui.coverCanvas, ui.coverPlaceholder),
-            renderGeneratedPdf(state.contentBytes, ui.contentCanvas, ui.contentPlaceholder)
+            renderGeneratedPdf(state.coverBytes, ui.coverContainer, ui.coverPlaceholder),
+            renderGeneratedPdf(state.contentBytes, ui.contentContainer, ui.contentPlaceholder)
           ]);
           ui.downloadCover.disabled = false;
           ui.downloadContent.disabled = false;
@@ -1871,25 +1892,33 @@
     ui.remove.addEventListener("click", resetAll);
     ui.generate.addEventListener("click", generate);
 
-    ui.size.addEventListener("change", () => {
-      ui.custom.classList.toggle("show", ui.size.value === "CUSTOM");
+    function handleSizeOrOrientationChange() {
+      const isCustom = ui.size.value === "CUSTOM";
+      ui.custom.classList.toggle("show", isCustom);
+      ui.orientation.disabled = isCustom; // Nonaktifkan orientasi jika custom (karena dihitung dari width/height)
+      
       const staplesWasReset = syncFinishingRules();
       syncOutputRules();
       clearOutputs();
       if(state.meta) renderMeta();
       updateGenerateButton();
 
-      if (ui.size.value === "A4L") {
+      const target = targetSize();
+      if (target?.key === "A4L") {
         showStatus(staplesWasReset ? "A4 Landscape tidak mendukung Staples tengah. Pilihan finishing dikembalikan ke Pilih finishing." : "A4 Landscape dipilih. Opsi Staples tengah dinonaktifkan.", "warning");
-      } else if (state.meta && (!ui.size.value || !ui.finish.value)) {
-        showStatus("Pilih ukuran jadi dan finishing untuk melanjutkan.", "info");
+      } else if (state.meta && (!target || !ui.finish.value)) {
+        showStatus("Pilih ukuran jadi (termasuk orientasi) dan finishing untuk melanjutkan.", "info");
       } else if (state.meta) {
-        showStatus("Ukuran jadi diperbarui. Buat ulang layout untuk menerapkan perubahan.", "info");
+        showStatus("Pengaturan diperbarui. Buat ulang layout untuk menerapkan perubahan.", "info");
       }
-    });
+    }
+
+    ui.size.addEventListener("change", handleSizeOrOrientationChange);
+    ui.orientation.addEventListener("change", handleSizeOrOrientationChange);
 
     ui.finish.addEventListener("change", () => {
-      if (ui.size.value === "A4L" && ui.finish.value === "staples") {
+      const target = targetSize();
+      if (target?.key === "A4L" && ui.finish.value === "staples") {
         ui.finish.value = "";
         showStatus("A4 Landscape tidak mendukung finishing Staples tengah.", "error");
       }
@@ -1900,8 +1929,8 @@
 
       if (state.meta && ui.finish.value === "hotglue" && state.meta.contentPages < 60) {
         showStatus(`Lem panas minimal 60 halaman isi. File ini hanya memiliki ${state.meta.contentPages} halaman isi.`, "error");
-      } else if (state.meta && (!ui.size.value || !ui.finish.value)) {
-        showStatus("Pilih ukuran jadi dan finishing untuk melanjutkan.", "info");
+      } else if (state.meta && (!target || !ui.finish.value)) {
+        showStatus("Pilih ukuran jadi (termasuk orientasi) dan finishing untuk melanjutkan.", "info");
       } else if (state.meta) {
         showStatus("Finishing diperbarui. Buat ulang layout untuk menerapkan perubahan.", "info");
       }
